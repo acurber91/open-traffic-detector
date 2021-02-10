@@ -8,6 +8,7 @@ import argparse
 import time
 import cv2
 import numpy as np
+import math
 
 from pycoral.adapters import common
 from pycoral.adapters import detect
@@ -16,7 +17,7 @@ from pycoral.utils.edgetpu import make_interpreter, run_inference
 from sort.sort import Sort
 from tracker.tracker import ObjectCounter
 from vehicle.vehicle import Vehicle
-from utils.utils import draw_objects
+from utils.utils import *
 
 def main():
 	# Cargamos todos los argumentos para configurar el programa.
@@ -81,8 +82,14 @@ def main():
 		inference_time = time.perf_counter() - start
 		objs = detect.get_objects(interpreter, args.threshold, (scalingFactorX, scalingFactorY))
 
-		# Definimos el vector que se debe ingresar en el detector.
-		trackObj = np.empty((0, 5))
+		# Definimos el vector que se debe ingresar en el rastreador.
+		trackObjs = np.empty((0, 5))
+
+		# Definimos el vector que almacenará los objetos del detector.
+		detectedObjs = np.empty((0, 5))
+
+		# Definimos el vector que almacenará los objetos rastreados con sus clases.
+		completeObjs = np.empty((0, 6))
 
 		# Si se detectaron objetos, tendremos que enviarlos al tracker.
 		if objs:
@@ -90,17 +97,28 @@ def main():
 				# Iteramos en todos los objetos. Solamente los compartiremos con el tracker si pertenecen a las clases "car" o "truck".
 				if(obj.id == 2 or obj.id == 7):
 					# Se arma el array correspondiente.
-					trackObj = np.append(trackObj, np.array([[obj.bbox.xmin, obj.bbox.ymin, obj.bbox.xmax, obj.bbox.ymax, obj.score]]), axis=0)
+					trackObjs = np.append(trackObjs, np.array([[obj.bbox.xmin, obj.bbox.ymin, obj.bbox.xmax, obj.bbox.ymax, obj.score]]), axis=0)
+					detectedObjs = np.append(detectedObjs, np.array([[obj.bbox.xmin, obj.bbox.ymin, obj.bbox.xmax, obj.bbox.ymax, obj.id]]), axis=0)
 		
 		# Si el array de objetos no está vacío, se lo comparte con el "tracker".
-		if trackObj.size != 0:
-			trackers = tracker.update(trackObj)
+		if trackObjs.size != 0:
+			trackers = tracker.update(trackObjs)
 		# Caso contrario, como se necesita llamarlo en cada "frame", se le comparte un array vacío.
 		else:
 			trackers = tracker.update(np.empty((0, 5)))
-				
+		
+		# Nos queda asociar el tipo de objeto con su tracker. Para ello, vamos a utiliza la distancia euclidiana.
+		if trackers.size != 0:
+			for track in trackers:
+				trackedBox = calculate_centroid(track[0], track[1], track[2], track[3])
+				for detectedObj in detectedObjs:
+					detectedBox = calculate_centroid(detectedObj[0], detectedObj[1], detectedObj[2], detectedObj[3])
+					distance = math.sqrt(pow(trackedBox[0] - detectedBox[0], 2) + pow(trackedBox[1] - detectedBox[1], 2))
+					if distance <= 10: # Si hay una diferencia de hasta 10 píxeles, la detección se corresponde con el track.
+						completeObjs = np.append(completeObjs, np.array([[track[0], track[1], track[2], track[3], track[4], detectedObj[4]]]), axis=0)
+			
 		# Se llama a la función para que actualice la cuenta, independientemente de si se detectó algo nuevo o no.
-		counter.update(trackers, args.verbose)
+		counter.update(completeObjs, args.verbose)
 							
 		#TODO: Tengo que implementar este método. La idea es que siempre se le compartan los IDs, para que 
 		# la función se encargue de actualizar el estado de los objetos y en caso de que sea necesario eliminarlos.

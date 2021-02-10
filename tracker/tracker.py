@@ -71,13 +71,15 @@ class ObjectCounter(object):
 			for obj in trackedObjects:
 				# Obtenemos el ID.
 				trackedId = int(obj[4])
+				# Obtenemos la clase de objeto.
+				vehicleClass = int(obj[5])
 				# Calculamos el centroide.
 				newPosition = calculate_centroid(obj[0], obj[1], obj[2], obj[3])
 				# Y chequeamos si se está contando o no.
 				searchResult = self.check_object_counted(trackedId)
 				# Si no lo está, lo agregamos para que se cuente.
 				if searchResult is None:
-					newCar = Vehicle(trackedId, newPosition, self.current_frame, datetime.datetime.now())
+					newCar = Vehicle(trackedId, vehicleClass, newPosition, self.current_frame, datetime.datetime.now())
 					self.append_object(newCar)
 				else:
 					# Caso contrario, actualizamos todos sus parámetros.
@@ -101,6 +103,8 @@ class ObjectCounter(object):
 				self.delete_object(self.objects.index(obj))
 			# Luego se revisa si se puede calcular el sentido de circulación o no.
 			if obj.frames_seen > 5 and obj.direction == 0:
+				# Mostramos la clase de vehículo.
+				print("[INFO]   Clase de vehículo:", obj.vehicle_class)
 				# Declaramos un array vacío donde se almacenaran las coordenadas X de todos los centroides.
 				x = []
 				for p in obj.positions:
@@ -147,16 +151,22 @@ class ObjectCounter(object):
 					while j != "E":
 						distanceDiff = (obj.pixelRef[i] - obj.pixelRef[j]) * 0.0087 # Metros por pixel.
 						timeDiff = abs(obj.timeRef[j].timestamp() - obj.timeRef[i].timestamp())
-						velocity = (distanceDiff / timeDiff) * 3.6 # Para pasar de m/s a km/h.
-						calculatedSpeed.append(round(velocity, 2))
+						try:
+							velocity = (distanceDiff / timeDiff) * 3.6 # Para pasar de m/s a km/h.
+							calculatedSpeed.append(round(velocity, 2))
+						except ZeroDivisionError:
+							calculatedSpeed.append(-1) # No se puede calcular la velocidad.
 						i = chr(ord(i) + 1)
 						j = chr(ord(j) + 1)
 				elif obj.direction == 1:
 					while j != "E":
 						distanceDiff = (obj.pixelRef[i] - obj.pixelRef[j]) * 0.0087 # Metros por pixel.
 						timeDiff = abs(obj.timeRef[i].timestamp() - obj.timeRef[j].timestamp())
-						velocity = (distanceDiff / timeDiff) * 3.6 # Para pasar de m/s a km/h.
-						calculatedSpeed.append(round(velocity, 2))
+						try:
+							velocity = (distanceDiff / timeDiff) * 3.6 # Para pasar de m/s a km/h.
+							calculatedSpeed.append(round(velocity, 2))
+						except ZeroDivisionError:
+							calculatedSpeed.append(-1) # No se puede calcular la velocidad.
 						i = chr(ord(i) + 1)
 						j = chr(ord(j) + 1)
 				if verboseOption:

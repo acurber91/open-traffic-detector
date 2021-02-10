@@ -6,8 +6,9 @@ import datetime
 from utils.utils import find_nearest
 
 class Vehicle(object):
-	def __init__(self, vehicleId, position, frame, timestamp):
+	def __init__(self, vehicleId, vehicleClass, position, frame, timestamp):
 		self.id = vehicleId
+		self.vehicle_class = vehicleClass
 		self.positions = [position]
 		self.timestamps = [timestamp]
 		self.timeRef = {"A": 0, "B": 0, "C": 0, "D": 0}
