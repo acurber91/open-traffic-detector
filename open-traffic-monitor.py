@@ -1,6 +1,6 @@
 # Comando
 #
-# python3 test6.py -m ./models/tflite/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite -l ./models/labels/coco_labels.txt -o output_video
+# python3 open-traffic-monitor.py -m ./models/tflite/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite -l ./models/labels/coco_labels.txt -o output_video
 #
 
 import sys
@@ -9,6 +9,7 @@ import time
 import cv2
 import numpy as np
 import math
+import threading
 
 from pycoral.adapters import common
 from pycoral.adapters import detect
@@ -16,18 +17,18 @@ from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter, run_inference
 from sort.sort import Sort
 from tracker.tracker import ObjectCounter
-from vehicle.vehicle import Vehicle
 from utils.utils import *
+from reporter.reporter import Reporter
 
 def main():
 	# Cargamos todos los argumentos para configurar el programa.
-	parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-	parser.add_argument('-m', '--model', required=True, help='File path of .tflite file')
-	parser.add_argument('-l', '--labels', help='File path of labels file')
-	parser.add_argument('-t', '--threshold', type=float, default=0.5, help='Score threshold for detected objects')
-	parser.add_argument('-o', '--output', help='File path for the result image with annotations')
-	parser.add_argument('-c', '--count', type=int, default=5, help='Number of times to run inference')
-	parser.add_argument('-v', '--verbose', action='store_true', help='Increase verbosity level')
+	parser = argparse.ArgumentParser(formatter_class = argparse.ArgumentDefaultsHelpFormatter)
+	parser.add_argument('-m', '--model', required = True, help = 'File path of .tflite file')
+	parser.add_argument('-l', '--labels', help = 'File path of labels file')
+	parser.add_argument('-t', '--threshold', type = float, default = 0.5, help = 'Score threshold for detected objects')
+	parser.add_argument('-o', '--output', help = 'File path for the result image with annotations')
+	parser.add_argument('-c', '--count', type = int, default = 5, help = 'Number of times to run inference')
+	parser.add_argument('-v', '--verbose', action = 'store_true', help = 'Increase verbosity level')
 	args = parser.parse_args()
 
 	# Se cargan el archivo de etiquetas.
@@ -41,18 +42,21 @@ def main():
 	interpreter.allocate_tensors()
 
 	# Obtenemos los valores de ancho y alto que está esperando el modelo.
-	modelSize = interpreter.get_input_details()
-	modelHeight = modelSize[0]['shape'][1]
-	modelWidth = modelSize[0]['shape'][2]
+	model_size = interpreter.get_input_details()
+	model_height = model_size[0]['shape'][1]
+	model_width = model_size[0]['shape'][2]
 
 	# Instanciamos el objeto Sort, que será el encargado de llevar a cabo el "tracking".
-	tracker = Sort(max_age=3, min_hits=5, iou_threshold=0.3)
+	tracker = Sort(max_age = 3, min_hits = 5, iou_threshold = 0.3)
 
 	# Comenzamos a capturar el video utilizando la biblioteca OpenCV.
 	videoStream = cv2.VideoCapture('/home/agustin/MIoT/traffic_monitor/Video01.mp4')
 
 	# Instanciamos el objeto ObjectCount, que será encargado de contar los vehículos en este caso.
 	counter = ObjectCounter(videoStream)
+
+	# Instanciamos el objeto Reporter, que será encargado de almacenar los objetos y reportarlos.
+	reporter = Reporter("/home/agustin/MIoT/traffic_monitor/open-traffic-monitor/logs/")
 
 	print('-------RESULTS--------')
 
@@ -66,30 +70,30 @@ def main():
 			break
 		
 		# Obtenemos el ancho y alto de la imagen de entrada.
-		inputHeight, inputWidth = frame.shape[:2]
+		input_height, input_width = frame.shape[:2]
 
 		# Tenemos que calcular el factor por el cual se debe escalar la imagen.
-		scalingFactorX = modelWidth / inputWidth
-		scalingFactorY = modelHeight / inputHeight
+		scaling_factor_x = model_width / input_width
+		scaling_factor_y = model_height / input_height
 			
-		newFrame = cv2.resize(frame, (modelHeight, modelWidth), interpolation = cv2.INTER_AREA)
+		new_frame = cv2.resize(frame, (model_height, model_width), interpolation = cv2.INTER_AREA)
 		
 		# Copiamos la imagen ya escalada a la entrada del tensor.
-		common.set_input(interpreter, newFrame)
+		common.set_input(interpreter, new_frame)
 
 		start = time.perf_counter()
 		interpreter.invoke()
 		inference_time = time.perf_counter() - start
-		objs = detect.get_objects(interpreter, args.threshold, (scalingFactorX, scalingFactorY))
+		objs = detect.get_objects(interpreter, args.threshold, (scaling_factor_x, scaling_factor_y))
 
 		# Definimos el vector que se debe ingresar en el rastreador.
-		trackObjs = np.empty((0, 5))
+		tracked_objs = np.empty((0, 5))
 
 		# Definimos el vector que almacenará los objetos del detector.
-		detectedObjs = np.empty((0, 5))
+		detected_objs = np.empty((0, 5))
 
 		# Definimos el vector que almacenará los objetos rastreados con sus clases.
-		completeObjs = np.empty((0, 6))
+		completed_objs = np.empty((0, 6))
 
 		# Si se detectaron objetos, tendremos que enviarlos al tracker.
 		if objs:
@@ -97,12 +101,12 @@ def main():
 				# Iteramos en todos los objetos. Solamente los compartiremos con el tracker si pertenecen a las clases "car" o "truck".
 				if(obj.id == 2 or obj.id == 7):
 					# Se arma el array correspondiente.
-					trackObjs = np.append(trackObjs, np.array([[obj.bbox.xmin, obj.bbox.ymin, obj.bbox.xmax, obj.bbox.ymax, obj.score]]), axis=0)
-					detectedObjs = np.append(detectedObjs, np.array([[obj.bbox.xmin, obj.bbox.ymin, obj.bbox.xmax, obj.bbox.ymax, obj.id]]), axis=0)
+					tracked_objs = np.append(tracked_objs, np.array([[obj.bbox.xmin, obj.bbox.ymin, obj.bbox.xmax, obj.bbox.ymax, obj.score]]), axis=0)
+					detected_objs = np.append(detected_objs, np.array([[obj.bbox.xmin, obj.bbox.ymin, obj.bbox.xmax, obj.bbox.ymax, obj.id]]), axis=0)
 		
 		# Si el array de objetos no está vacío, se lo comparte con el "tracker".
-		if trackObjs.size != 0:
-			trackers = tracker.update(trackObjs)
+		if tracked_objs.size != 0:
+			trackers = tracker.update(tracked_objs)
 		# Caso contrario, como se necesita llamarlo en cada "frame", se le comparte un array vacío.
 		else:
 			trackers = tracker.update(np.empty((0, 5)))
@@ -110,19 +114,19 @@ def main():
 		# Nos queda asociar el tipo de objeto con su tracker. Para ello, vamos a utiliza la distancia euclidiana.
 		if trackers.size != 0:
 			for track in trackers:
-				trackedBox = calculate_centroid(track[0], track[1], track[2], track[3])
-				for detectedObj in detectedObjs:
-					detectedBox = calculate_centroid(detectedObj[0], detectedObj[1], detectedObj[2], detectedObj[3])
-					distance = math.sqrt(pow(trackedBox[0] - detectedBox[0], 2) + pow(trackedBox[1] - detectedBox[1], 2))
+				tracked_box = calculate_centroid(track[0], track[1], track[2], track[3])
+				for detected_obj in detected_objs:
+					detected_box = calculate_centroid(detected_obj[0], detected_obj[1], detected_obj[2], detected_obj[3])
+					distance = math.sqrt(pow(tracked_box[0] - detected_box[0], 2) + pow(tracked_box[1] - detected_box[1], 2))
 					if distance <= 10: # Si hay una diferencia de hasta 10 píxeles, la detección se corresponde con el track.
-						completeObjs = np.append(completeObjs, np.array([[track[0], track[1], track[2], track[3], track[4], detectedObj[4]]]), axis=0)
+						completed_objs = np.append(completed_objs, np.array([[track[0], track[1], track[2], track[3], track[4], detected_obj[4]]]), axis=0)
 			
 		# Se llama a la función para que actualice la cuenta, independientemente de si se detectó algo nuevo o no.
-		counter.update(completeObjs, args.verbose)
-							
-		#TODO: Tengo que implementar este método. La idea es que siempre se le compartan los IDs, para que 
-		# la función se encargue de actualizar el estado de los objetos y en caso de que sea necesario eliminarlos.
+		objToSave = counter.update(completed_objs, args.verbose)
 
+		if(objToSave != None):
+			reporter.data_save(objToSave)
+							
 		if args.output:
 			draw_objects(frame, objs, labels)
 			if trackers.size != 0:
