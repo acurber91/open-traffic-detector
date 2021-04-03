@@ -6,7 +6,6 @@ import paho.mqtt.client as mqtt
 from random import randrange, uniform
 import time
 
-mqttBroker = "mqtt.eclipseprojects.io"
 client = mqtt.Client("Test")
 client.connect("127.0.0.1", 1883, 60)
 

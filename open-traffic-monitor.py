@@ -1,15 +1,14 @@
 # Comando
 #
-# python3 open-traffic-monitor.py -m ./models/tflite/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite -l ./models/labels/coco_labels.txt -o output_video
+# sudo python3 open-traffic-monitor.py
 #
 
-import sys
-import argparse
 import time
 import cv2
 import numpy as np
 import math
-import threading
+import yaml
+import keyboard
 
 from pycoral.adapters import common
 from pycoral.adapters import detect
@@ -21,22 +20,16 @@ from utils.utils import *
 from reporter.reporter import Reporter
 
 def main():
-	# Cargamos todos los argumentos para configurar el programa.
-	parser = argparse.ArgumentParser(formatter_class = argparse.ArgumentDefaultsHelpFormatter)
-	parser.add_argument('-m', '--model', required = True, help = 'File path of .tflite file')
-	parser.add_argument('-l', '--labels', help = 'File path of labels file')
-	parser.add_argument('-t', '--threshold', type = float, default = 0.5, help = 'Score threshold for detected objects')
-	parser.add_argument('-o', '--output', help = 'File path for the result image with annotations')
-	parser.add_argument('-c', '--count', type = int, default = 5, help = 'Number of times to run inference')
-	parser.add_argument('-v', '--verbose', action = 'store_true', help = 'Increase verbosity level')
-	args = parser.parse_args()
+	
+	# The configuration file is loaded. The contents of the YAML are translated into a dictionary.
+	config = yaml.safe_load(open("./config.yml"))
 
 	# Se cargan el archivo de etiquetas.
-	labels = read_label_file(args.labels) if args.labels else {}
+	labels = read_label_file(config["input"]["labels"]) if config["input"]["labels"] else {}
 
 	# Se declara el intérprete de TensorFlow Lite para que sea accesible desde Python. Adicionalmente, se lo
 	# asocia a Edge TPU para que se encargue del procesamiento.
-	interpreter = make_interpreter(args.model)
+	interpreter = make_interpreter(config["input"]["model"])
 
 	# Asignamos memoria para el modelo de entrada de TensorFlow.
 	interpreter.allocate_tensors()
@@ -50,13 +43,13 @@ def main():
 	tracker = Sort(max_age = 3, min_hits = 5, iou_threshold = 0.3)
 
 	# Comenzamos a capturar el video utilizando la biblioteca OpenCV.
-	videoStream = cv2.VideoCapture('/home/agustin/MIoT/traffic_monitor/Video01.mp4')
+	videoStream = cv2.VideoCapture(config["input"]["source"])
 
 	# Instanciamos el objeto ObjectCount, que será encargado de contar los vehículos en este caso.
 	counter = ObjectCounter(videoStream)
 
 	# Instanciamos el objeto Reporter, que será encargado de almacenar los objetos y reportarlos.
-	reporter = Reporter("/home/agustin/MIoT/traffic_monitor/open-traffic-monitor/logs/")
+	reporter = Reporter(config["result"]["logs"])
 
 	print('-------RESULTS--------')
 
@@ -84,7 +77,7 @@ def main():
 		start = time.perf_counter()
 		interpreter.invoke()
 		inference_time = time.perf_counter() - start
-		objs = detect.get_objects(interpreter, args.threshold, (scaling_factor_x, scaling_factor_y))
+		objs = detect.get_objects(interpreter, config["detector"]["threshold"], (scaling_factor_x, scaling_factor_y))
 
 		# Definimos el vector que se debe ingresar en el rastreador.
 		tracked_objs = np.empty((0, 5))
@@ -122,19 +115,22 @@ def main():
 						completed_objs = np.append(completed_objs, np.array([[track[0], track[1], track[2], track[3], track[4], detected_obj[4]]]), axis=0)
 			
 		# Se llama a la función para que actualice la cuenta, independientemente de si se detectó algo nuevo o no.
-		objToSave = counter.update(completed_objs, args.verbose)
+		objToSave = counter.update(completed_objs, config["result"]["verbose"])
 
 		if(objToSave != None):
 			reporter.data_save(objToSave)
 							
-		if args.output:
+		if config["result"]["output"]:
 			draw_objects(frame, objs, labels)
 			if trackers.size != 0:
-				cv2.putText(frame, '%.2f' % (trackers[0, 4]), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 1, cv2.LINE_AA)
-			cv2.imshow(args.output, frame)
+				cv2.putText(frame, '%.2f' % (trackers[0, 4]), (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 1, cv2.LINE_AA)
+			cv2.imshow("Detections", frame)
+		else:
+			if keyboard.is_pressed("q"):
+				break
 		
 		# Press "q" to quit.
-		if cv2.waitKey(1) == ord('q'):
+		if cv2.waitKey(1) == ord("q"):
 			break
 
 	# Clean up

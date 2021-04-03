@@ -1,0 +1,18 @@
+input:
+    source: /home/agustin/MIoT/traffic_monitor/Video01.mp4
+    model: ./models/tflite/ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite
+    labels: ./models/labels/coco_labels.txt
+detector:
+    threshold: 0.5
+tracker:
+    max_age: 3
+    min_hits: 5
+    iou_threshold: 0.3
+result:
+    output: true
+    logs: ./logs/
+    verbose: false
+mqtt:
+    borker: 127.0.0.1
+    port: 1883
+    topic: myfirst/test
