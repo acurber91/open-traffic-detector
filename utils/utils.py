@@ -20,18 +20,25 @@ import numpy as np
 import cv2
 
 def calculate_centroid(x1, y1, x2, y2):
+	"""
+	Calculates the centroid of a rectangle based on two corners coordinates.
+	"""
 	return(int((x1 + x2)/2), int((y1 + y2)/2))
 
 
 def find_nearest(array, value):
+	"""
+	Find the nearest array object for a certain value.
+	"""
 	array = np.asarray(array)
 	id_x = (np.abs(array - value)).argmin()
-	#return array[id_x]
 	return id_x
 
 
 def draw_objects(img, objs, labels):
-	"""Draws the bounding box and label for each object."""
+	"""
+	Draws a bounding box and label for each object.
+	"""
 	for obj in objs:
 		if obj.id == 2 or obj.id == 3 or obj.id == 7:
 			bbox = obj.bbox

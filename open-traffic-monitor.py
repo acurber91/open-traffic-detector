@@ -32,6 +32,9 @@ from reporter.reporter import Reporter
 
 
 def main():
+	"""
+	Main function of the Open Traffic Monitor.
+	"""
 	
 	# The configuration file is read. The content of the YAML file is loaded into a dictionary.
 	config = yaml.safe_load(open("./config.yml"))
@@ -60,8 +63,6 @@ def main():
 
 	# The Reporter class object is instantiated.
 	reporter = Reporter(config["result"]["logs"])
-
-	print('-------RESULTS--------')
 
 	# The while loop is executed until a SIGINT is received.
 	try:
@@ -151,7 +152,7 @@ def main():
 		# Clean up
 		cv2.destroyAllWindows()
 		videoStream.release()
-		print("[INFO] Exiting gracefully. Bye!")
+		print("[INFO]   Exiting gracefully. Bye!")
 	
 if __name__ == '__main__':
 	main()

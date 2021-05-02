@@ -22,6 +22,9 @@ import datetime
 from utils.utils import find_nearest
 
 class ObjectToTrack(object):
+	"""
+	This class represent the objects that are going to be tracked.
+	"""
 	def __init__(self, vehicleId, vehicleClass, position, frame, timestamp):
 		self.id = vehicleId
 		self.object_class = vehicleClass
@@ -39,10 +42,16 @@ class ObjectToTrack(object):
 
 
 	def last_position(self):
+		"""
+		Just returns the last position of the object.
+		"""
 		return self.positions[-1]
 
 
 	def add_position(self, new_position, frame):
+		"""
+		Adds a new position to the object's position array.
+		"""
 		self.positions.append(new_position)
 		self.timestamps.append(datetime.datetime.now())
 		self.frames_since_seen = 0
@@ -51,29 +60,27 @@ class ObjectToTrack(object):
 	
 
 	def find_references(self):
-		# Tenemos que separar las coordenadas (X, Y) de tuplas en listas independientes.
+		"""
+		Finds the closest references from the object's position array.
+		"""
 		x_positions, y_positions = zip(*self.positions)
 
-		# Buscamos dentro del array el ID más cercano a la referencia del punto A.
+		# Nearest reference to point A.
 		array_id = find_nearest(x_positions, 790)
-		# Y agregamos al diccionario tanto la posición como la referencia temporal.
 		self.pixel_ref["A"] = x_positions[array_id]
 		self.time_ref["A"] = self.timestamps[array_id]
 
-		# Buscamos dentro del array el ID más cercano a la referencia del punto B.
+		# Nearest reference to point B.
 		array_id = find_nearest(x_positions, 740)
-		# Y agregamos al diccionario tanto la posición como la referencia temporal.
 		self.pixel_ref["B"] = x_positions[array_id]
 		self.time_ref["B"] = self.timestamps[array_id]
 
-		# Buscamos dentro del array el ID más cercano a la referencia del punto C.
+		# Nearest reference to point C.
 		array_id = find_nearest(x_positions, 670)
-		# Y agregamos al diccionario tanto la posición como la referencia temporal.
 		self.pixel_ref["C"] = x_positions[array_id]
 		self.time_ref["C"] = self.timestamps[array_id]
 
-		# Buscamos dentro del array el ID más cercano a la referencia del punto D.
+		# Nearest reference to point D.
 		array_id = find_nearest(x_positions, 590)
-		# Y agregamos al diccionario tanto la posición como la referencia temporal.
 		self.pixel_ref["D"] = x_positions[array_id]
 		self.time_ref["D"] = self.timestamps[array_id]
