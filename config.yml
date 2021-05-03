@@ -32,6 +32,6 @@ result:
     logs: ./logs/
     verbose: false
 mqtt:
-    borker: 127.0.0.1
+    broker: 192.168.0.55
     port: 1883
     topic: myfirst/test

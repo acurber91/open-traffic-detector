@@ -29,6 +29,7 @@ from sort.sort import Sort
 from tracker.tracker import ObjectCounter
 from utils.utils import *
 from reporter.reporter import Reporter
+from mqtt.mqtt import MqttClient
 
 
 def main():
@@ -56,6 +57,7 @@ def main():
 	# The SORT class object is instantiated.
 	tracker = Sort(max_age = config["tracker"]["max_age"], min_hits = config["tracker"]["min_hits"], iou_threshold = config["tracker"]["iou_threshold"])
 
+	# Setup the video stream.
 	videoStream = cv2.VideoCapture(config["input"]["source"])
 
 	# The ObjectCounter class object is instantiated.
@@ -63,6 +65,9 @@ def main():
 
 	# The Reporter class object is instantiated.
 	reporter = Reporter(config["result"]["logs"])
+
+	# The MqttClient class object is instantiated.
+	client = MqttClient(config["mqtt"]["broker"], config["mqtt"]["port"])
 
 	# The while loop is executed until a SIGINT is received.
 	try:
@@ -135,6 +140,7 @@ def main():
 			# If there are objects to save, then we save them.
 			if(objToSave != None):
 				reporter.data_save(objToSave)
+				client.publish(config["mqtt"]["topic"], objToSave)
 								
 			# In case the user wants analyze the video output, then we show it.
 			if config["result"]["output"]:
@@ -152,6 +158,7 @@ def main():
 		# Clean up
 		cv2.destroyAllWindows()
 		videoStream.release()
+		client.disconnect()
 		print("[INFO]   Exiting gracefully. Bye!")
 	
 if __name__ == '__main__':
