@@ -1,7 +1,7 @@
 ![header](docs/otd_header.png)
 ![header](docs/otm_header.png)
-
-# Open Traffic Detector
+![header](docs/otd_header_1.png)
+![header](docs/otm_header_1.png)
 
 Autor:
 
