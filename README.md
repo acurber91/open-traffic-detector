@@ -2,10 +2,8 @@
     <img src="docs/logo.png"><br><br>
 </p>
 
-Autor:
+## About
 
-* Agustín Curcio Berardi
+To be completed.
 
----
-
-Primera versión. Work in progress.
+## Dependencies
