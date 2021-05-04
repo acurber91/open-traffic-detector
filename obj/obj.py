@@ -1,5 +1,5 @@
 """
-	Open Traffic Monitor: Simple and Realtime Traffic Monitor
+	Open Traffic Detector: Simple and Realtime Traffic Monitor
 	Copyright (C) 2020-2021 - Agustin Curcio Berardi
 
 	This program is free software: you can redistribute it and/or modify

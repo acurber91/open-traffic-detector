@@ -1,5 +1,5 @@
 """
-	Open Traffic Monitor: Simple and Realtime Traffic Monitor
+	Open Traffic Detector: Simple and Realtime Traffic Monitor
 	Copyright (C) 2020-2021 - Agustin Curcio Berardi
 
 	This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ from mqtt.mqtt import MqttClient
 
 def main():
 	"""
-	Main function of the Open Traffic Monitor.
+	Main function of the Open Traffic Detector.
 	"""
 	
 	# The configuration file is read. The content of the YAML file is loaded into a dictionary.
