@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="drawing.svg">
+   sodipodi:docname="drawing1.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2"
-     inkscape:cx="373.57007"
-     inkscape:cy="73.36964"
+     inkscape:cx="241.09062"
+     inkscape:cy="60.819252"
      inkscape:document-units="mm"
      inkscape:current-layer="g33"
      showgrid="false"
@@ -37,7 +37,28 @@
      inkscape:window-height="1017"
      inkscape:window-x="0"
      inkscape:window-y="30"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1">
+    <sodipodi:guide
+       position="0.59944661,28.129549"
+       orientation="1,0"
+       id="guide4622"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-1.480013,27.399878"
+       orientation="0,1"
+       id="guide4624"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="1.2043833,30.284978"
+       orientation="1,0"
+       id="guide4688"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-1.8942728,26.800452"
+       orientation="0,1"
+       id="guide4690"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -60,20 +81,54 @@
        transform="translate(-13.605271,222.93826)">
       <rect
          ry="4.0090427"
-         style="stroke-width:0.27132866"
+         style="stroke-width:0.27132866;fill:#008080"
          y="46.061714"
          x="13.607142"
          height="28"
          width="180"
          id="rect3713" />
       <rect
-         style="stroke-width:0.26870078"
-         y="55.352715"
-         x="13.607142"
-         height="18.709"
-         width="180"
-         id="rect3716" />
-      <g
+         ry="3.8372264"
+         style="fill:#ffffff;stroke-width:0.26456448"
+         y="46.661861"
+         x="14.204718"
+         height="26.800001"
+         width="178.8"
+         id="rect3713-7" />
+      <rect
+         ry="3.66541"
+         style="fill:#008080;stroke-width:0.25770441"
+         y="47.261288"
+         x="14.809654"
+         height="25.6"
+         width="177.60001"
+         id="rect3713-7-5" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+         x="50.23106"
+         y="64.012016"
+         id="text81"><tspan
+           sodipodi:role="line"
+           x="50.23106"
+           y="64.012016"
+           id="tspan79"
+           style="stroke-width:0.26458332;fill:#ffffff"><tspan
+             x="50.23106"
+             y="64.012016"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.69999981px;font-family:Inter;-inkscape-font-specification:'Inter Bold';fill:#ffffff;stroke-width:0.26458332"
+             id="tspan77">Open Traffic Detector</tspan></tspan></text>
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot69"
+         style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;letter-spacing:0px;word-spacing:0px"><flowRegion
+           id="flowRegion71"><rect
+             id="rect73"
+             width="289"
+             height="79"
+             x="139.5"
+             y="5.3267751" /></flowRegion><flowPara
+           id="flowPara75"></flowPara></flowRoot>      <g
          transform="matrix(1.0859782,0,0,1.074842,20.396085,47.169801)"
          id="g4022"
          style="fill:#ffffff">
@@ -87,31 +142,6 @@
            d="M 12,4 H 5 C 3.34,4 2,5.34 2,7 v 8 c 0,1.66 1.34,3 3,3 l -1,1 v 1 H 5 L 7,18 H 9 V 13 H 4 V 6 h 9 v 2 h 2 V 7 C 15,5.34 13.66,4 12,4 Z M 5,14 c 0.55,0 1,0.45 1,1 0,0.55 -0.45,1 -1,1 C 4.45,16 4,15.55 4,15 4,14.45 4.45,14 5,14 Z M 20.57,9.66 C 20.43,9.26 20.05,9 19.6,9 h -7.19 c -0.46,0 -0.83,0.26 -0.98,0.66 l -1.42,4.11 v 5.51 c 0,0.38 0.31,0.72 0.69,0.72 h 0.62 C 11.7,20 12,19.62 12,19.24 V 18 h 8 v 1.24 c 0,0.38 0.31,0.76 0.69,0.76 h 0.61 c 0.38,0 0.69,-0.34 0.69,-0.72 L 22,17.91 V 13.77 Z M 12.41,10 h 7.19 l 1.03,3 H 11.38 Z M 12,16 c -0.55,0 -1,-0.45 -1,-1 0,-0.55 0.45,-1 1,-1 0.55,0 1,0.45 1,1 0,0.55 -0.45,1 -1,1 z m 8,0 c -0.55,0 -1,-0.45 -1,-1 0,-0.55 0.45,-1 1,-1 0.55,0 1,0.45 1,1 0,0.55 -0.45,1 -1,1 z"
            id="path4010" />
       </g>
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-         x="50.23106"
-         y="64.012016"
-         id="text81"><tspan
-           sodipodi:role="line"
-           x="50.23106"
-           y="64.012016"
-           id="tspan79"
-           style="stroke-width:0.26458332"><tspan
-             x="50.23106"
-             y="64.012016"
-             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.69999981px;font-family:Inter;-inkscape-font-specification:'Inter Bold';fill:#ffff00;stroke-width:0.26458332"
-             id="tspan77">Open Traffic Detector</tspan></tspan></text>
-      <flowRoot
-         xml:space="preserve"
-         id="flowRoot69"
-         style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;letter-spacing:0px;word-spacing:0px"><flowRegion
-           id="flowRegion71"><rect
-             id="rect73"
-             width="289"
-             height="79"
-             x="139.5"
-             y="5.3267751" /></flowRegion><flowPara
-           id="flowPara75"></flowPara></flowRoot>    </g>
+    </g>
   </g>
 </svg>
