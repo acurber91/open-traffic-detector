@@ -1,11 +1,11 @@
 <br>
 <p align="center">
-    <img src="docs/header.svg" width=100%><br>
+    <img src="docs/header.svg" width=100%>
 </p>
 
 #
 
-<h3 align="center">A simple and real-time traffic monitoring solution using TensorFlow and OpenCV.</h3>
+<h4 align="center">A simple and real-time traffic monitoring solution using TensorFlow and OpenCV.</h4>
 
 ## About
 
