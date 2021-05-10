@@ -9,6 +9,6 @@
 
 ## About
 
-To be completed.
+This repository contains the **Open Traffic Detector** source code. Open Traffic Detector is a simple Python solution to track, count and estimate the speed and direction of vehicles to gather real-time data about traffic.
 
 ## Dependencies
