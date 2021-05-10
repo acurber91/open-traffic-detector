@@ -1,7 +1,6 @@
 <br>
 <p align="center">
     <img src="docs/header.svg" width=100%><br><br>
-    A simple and real-time traffic monitoring solution using TensorFlow and OpenCV.
 </p>
 
 ## About
