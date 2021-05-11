@@ -9,7 +9,7 @@ This repository contains the **Open Traffic Detector** source code. It is a simp
 
 ## Introduction
 
-**Open Traffic Detector** is a use case for edge computing applications. It was designed to run in a Raspberry Pi 4B alongside the Google Coral USB accelerator to perform almost real-time vehicle tracking and detection. It is designed for online tracking applications so it can be modified to track other types of objects by just fine-tunning or adapting used model for the detector. It makes use of TensorFlow Lite, a lightweight implementation of TensorFlow meant to achieve faster inference times and require less processing power. OpenCV is used for video processing as well as estimating the speed and direction of the object based on the same techniques used by VASCAR systems. This means that additional calibration and measurement of references in the image have to be collected to get reliable estimations.
+**Open Traffic Detector** is a use case for edge computing applications. It was designed to run in a Raspberry Pi 4B alongside the Google Coral USB accelerator to perform almost real-time vehicle tracking and detection. It is designed for online tracking applications in general so it can be modified to track other types of objects by fine-tunning or adapting the detector model. It makes use of TensorFlow Lite, a lightweight implementation of TensorFlow meant to achieve faster inference times and require less processing power. OpenCV is used for video processing as well as estimating the speed and direction of the object based on the same techniques used by VASCAR systems. This means that additional calibration and measurement of references in the image have to be collected to get reliable estimations.
 
 ### Built with
 
