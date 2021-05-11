@@ -38,14 +38,18 @@ class MqttClient():
         self.client.on_message = self.on_message
         self.client.on_publish = self.on_publish
 
-        # Connect.
-        self.client.connect(self.host, self.port, keepalive = self.keep_alive)
+        try:
+            # Connect.
+            self.client.connect(self.host, self.port, keepalive = self.keep_alive)
 
-        # Start loop.
-        self.client.loop_start()
+            # Start loop.
+            self.client.loop_start()
+
+        except Exception as e:
+            print("[WARNING] Could not connect to MQTT server.")
 
     def on_publish(self, client, userdata, mid):
-        print("[INFO]   Successfully sent MQTT with MID: " + str(mid))
+        print("[INFO]    Successfully sent MQTT with MID: " + str(mid))
 
     def on_message(self, client, userdata, msg):
         """
@@ -54,12 +58,12 @@ class MqttClient():
 
     def on_connect(self, client, userdata, flags, result_code):
         if result_code == 0:
-            print("[INFO]   Successfully connected to MQTT broker.")
+            print("[INFO]    Successfully connected to MQTT broker.")
         else:
-            print("[INFO]   Failed to connect to MQTT broker: " + paho.connack_string(result_code))
+            print("[INFO]    Failed to connect to MQTT broker: " + paho.connack_string(result_code))
 
     def on_disconnect(self, client, userdata, result_code):
-        print("[INFO]   Disconnected from MQTT broker.")
+        print("[INFO]    Disconnected from MQTT broker.")
     
     def publish(self, topic, message, qos = 2):
         (rc, mid) = self.client.publish(str(topic), str(message), qos = qos)

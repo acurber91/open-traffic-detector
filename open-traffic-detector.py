@@ -77,7 +77,7 @@ def main():
 			ret, frame = videoStream.read()
 
 			if not(ret):
-				print("[ERROR] The video frame could not be read.")
+				print("[ERROR]   The video frame could not be read.")
 				break
 			
 			# Input image width and height is retrieved.
@@ -159,7 +159,7 @@ def main():
 		cv2.destroyAllWindows()
 		videoStream.release()
 		client.disconnect()
-		print("[INFO]   Exiting gracefully. Bye!")
+		print("[INFO]    Exiting gracefully. Bye!")
 	
 if __name__ == '__main__':
 	main()

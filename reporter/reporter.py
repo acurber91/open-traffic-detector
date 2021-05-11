@@ -35,7 +35,7 @@ class Reporter():
 			writer = csv.DictWriter(outcsv, fieldnames = field_names) 
 			writer.writeheader()
 		outcsv.close()
-		print("[INFO] The following file has been created.:", self.full_path)
+		print("[INFO]    The following file has been created.:", self.full_path)
 
 
 	def data_save(self, dataToSave):

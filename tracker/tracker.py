@@ -135,7 +135,7 @@ class ObjectCounter(object):
 				self.delete_object(self.objects.index(obj))
 			# Check if direction can be calculated.
 			if obj.frames_seen > 5 and obj.direction == 0:
-				print("[INFO]   Object class:", obj.object_class)
+				print("[INFO]    Object class:", obj.object_class)
 				# An auxiliary array to store all the centroids.
 				x = []
 				for p in obj.positions:
@@ -144,12 +144,12 @@ class ObjectCounter(object):
 					# Left to right direction.
 					obj.direction = 1
 					self.objects_one_way += 1
-					print("[INFO]   Direction: ----->")
+					print("[INFO]    Direction: ----->")
 				else:
 					# Right to left direction.
 					obj.direction = 2
 					self.objects_other_way += 1
-					print("[INFO]   Direction: <-----")
+					print("[INFO]    Direction: <-----")
 			
 			# If the direction could be calculated, then speed can also be determined based on position and time references.
 			if obj.direction == 1:
@@ -157,10 +157,10 @@ class ObjectCounter(object):
 					if not(obj.speed_ready):
 						obj.find_references()
 						if verbose:
-							print("[DEBUG]  Point A:", obj.pixel_ref["A"], ", Timestamp:", obj.time_ref["A"])
-							print("[DEBUG]  Point B:", obj.pixel_ref["B"], ", Timestamp:", obj.time_ref["B"])
-							print("[DEBUG]  Point C:", obj.pixel_ref["C"], ", Timestamp:", obj.time_ref["C"])
-							print("[DEBUG]  Point D:", obj.pixel_ref["D"], ", Timestamp:", obj.time_ref["D"])
+							print("[DEBUG]   Point A:", obj.pixel_ref["A"], ", Timestamp:", obj.time_ref["A"])
+							print("[DEBUG]   Point B:", obj.pixel_ref["B"], ", Timestamp:", obj.time_ref["B"])
+							print("[DEBUG]   Point C:", obj.pixel_ref["C"], ", Timestamp:", obj.time_ref["C"])
+							print("[DEBUG]   Point D:", obj.pixel_ref["D"], ", Timestamp:", obj.time_ref["D"])
 						obj.speed_ready = True
 
 			elif obj.direction == 2:
@@ -168,10 +168,10 @@ class ObjectCounter(object):
 					if not(obj.speed_ready):
 						obj.find_references()
 						if verbose:
-							print("[DEBUG]  Point A:", obj.pixel_ref["A"], ", Timestamp:", obj.time_ref["A"])
-							print("[DEBUG]  Point B:", obj.pixel_ref["B"], ", Timestamp:", obj.time_ref["B"])
-							print("[DEBUG]  Point C:", obj.pixel_ref["C"], ", Timestamp:", obj.time_ref["C"])
-							print("[DEBUG]  Point D:", obj.pixel_ref["D"], ", Timestamp:", obj.time_ref["D"])
+							print("[DEBUG]   Point A:", obj.pixel_ref["A"], ", Timestamp:", obj.time_ref["A"])
+							print("[DEBUG]   Point B:", obj.pixel_ref["B"], ", Timestamp:", obj.time_ref["B"])
+							print("[DEBUG]   Point C:", obj.pixel_ref["C"], ", Timestamp:", obj.time_ref["C"])
+							print("[DEBUG]   Point D:", obj.pixel_ref["D"], ", Timestamp:", obj.time_ref["D"])
 
 						obj.speed_ready = True
 
@@ -203,12 +203,12 @@ class ObjectCounter(object):
 						i = chr(ord(i) + 1)
 						j = chr(ord(j) + 1)
 				if verbose:
-					print("[DEBUG]  Estimated speed:", calculated_speed)
+					print("[DEBUG]   Estimated speed:", calculated_speed)
 				obj.speed = round(np.average(calculated_speed), 2)
-				print("[INFO]   Speed:", obj.speed, "km/h")
+				print("[INFO]    Speed:", obj.speed, "km/h")
 				
 				# And show the object count.
-				print("[INFO]   Counted objects:", self.object_count)
+				print("[INFO]    Counted objects:", self.object_count)
 		
 		# If there are objects to store, then return them.
 		if self.to_save:
