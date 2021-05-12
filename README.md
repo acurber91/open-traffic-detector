@@ -79,7 +79,7 @@ To setup this software correctly, a `config.yaml` file is included. You should m
         port:               # Broker port number.
         topic:              # Topic to publish to.
 
-Once the configuration file is completed, the software can be simply be executed like every other Python script:
+Once the configuration file is completed, simply run it like every other Python script:
 
     $ python3 open-traffic-detector.py
 
