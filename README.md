@@ -61,23 +61,23 @@ At this point, the TensorFlow Lite runtime has to be installed as per the [Pytho
 To setup this software correctly, a `config.yaml` file is included. You should modify it to meet your needs. The file is shown below and is fully documented.
 
     input:
-        source:                 # This can be a video path, a RTSP server IP or USB port number in case of a webcam.
-        model:                  # Path to the .tflite data model.
-        labels:                 # Labels file path.
+        source:             # This can be a video path, a RTSP server IP or USB port number in case of a webcam.
+        model:              # Path to the .tflite data model.
+        labels:             # Labels file path.
     detector:
-        threshold: 0.5          # TensorFlow accuracy threshold. Detections below this value will not be considered.
+        threshold: 0.5      # TensorFlow accuracy threshold. Detections below this value will not be considered.
     tracker:
-        max_age: 3              # Count of frames that need to pass for each track to be considered as lost.
-        min_hits: 5             # Minimum amount of detections required for a track to be assigned.
-        iou_threshold: 0.3      # Intersection over Union used by the SORT library.
+        max_age: 3          # Count of frames that need to pass for each track to be considered as lost.
+        min_hits: 5         # Minimum amount of detections required for a track to be assigned.
+        iou_threshold: 0.3  # Intersection over Union used by the SORT library.
     result:
-        output: true            # Show OpenCV video output. Boolean.
-        logs:                   # Folder to save log files to.
-        verbose:                # Verbose terminal output. Boolean.
+        output: true        # Show OpenCV video output. Boolean.
+        logs:               # Folder to save log files to.
+        verbose:            # Verbose terminal output. Boolean.
     mqtt:
-        broker:                 # MQTT broker IP.
-        port:                   # Broker port number.
-        topic:                  # MQTT topic to publish to.
+        broker:             # MQTT broker IP.
+        port:               # Broker port number.
+        topic:              # Topic to publish to.
 
 Once the configuration file is completed, the software can be simply be executed like every other Python script:
 
