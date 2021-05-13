@@ -58,7 +58,7 @@ At this point, the TensorFlow Lite runtime has to be installed as per the [Pytho
 
 ## How to use
 
-To setup this software correctly, a `config.yaml` file is included. You should modify it to meet your needs. The file is shown below and is fully documented.
+To setup this software correctly a `config.yaml` file is included. You should modify it to meet your needs. The file is shown below and fully documented.
 
     input:
         source:             # This can be a video path, a RTSP server IP or USB port number in case of a webcam.
