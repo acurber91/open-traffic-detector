@@ -85,6 +85,7 @@ Once the configuration file is completed, simply run it like every other Python 
 
 A sample terminal output for the video included in this files is shown below:
 
+    user@computer:~$ python3 open-traffic-detector.py
     [INFO]    The following file has been created.: ./logs/12-05-2021-21-03-20.csv
     [WARNING] Could not connect to MQTT server.
     [INFO]    Object class: 2
