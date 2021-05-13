@@ -83,6 +83,20 @@ Once the configuration file is completed, simply run it like every other Python 
 
     $ python3 open-traffic-detector.py
 
+A sample terminal output for the video included in this files is shown below:
+
+    [INFO]    The following file has been created.: ./logs/12-05-2021-21-03-20.csv
+    [WARNING] Could not connect to MQTT server.
+    [INFO]    Object class: 2
+    [INFO]    Direction: <-----
+    [INFO]    Speed: 31.76 km/h
+    [INFO]    Counted objects: 1
+    [INFO]    Object class: 2
+    [INFO]    Direction: ----->
+    [INFO]    Speed: 43.22 km/h
+    [INFO]    Counted objects: 1
+    [INFO]    Exiting gracefully. Bye!
+
 ## Acknowledgements
 
 - [SORT](https://github.com/abewley/sort)
